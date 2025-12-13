@@ -1,4 +1,4 @@
-# Exam Practice System (EPS)
+# ExamArena
 
 A robust, Flask-based Computer Based Test (CBT) practice application designed to simulate Nigerian examination environments (JAMB, WAEC, NECO). This system provides a realistic "War Room" exam interface for students and a comprehensive management panel for administrators.
 

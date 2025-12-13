@@ -5,8 +5,8 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
     # ADMIN credentials (move from app.py)
-    ADMIN_USERNAME = 'EPS'
-    ADMIN_PASSWORD = 'AdminEPS123'
+    ADMIN_USERNAME = 'EXAMARENA'
+    ADMIN_PASSWORD = 'AdminArena123'
 
     # Secret key used by Flask for sessions
     SECRET_KEY = 'Danrangi@2025'

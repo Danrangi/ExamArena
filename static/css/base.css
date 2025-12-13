@@ -101,3 +101,20 @@ body {
 .btn-sys.cancel { background: #e5e7eb; color: var(--text-main); }
 .btn-sys.confirm { background: var(--jamb-green); color: white; }
 .btn-sys.danger { background: var(--danger); color: white; }
+
+/* --- Custom Background for Themed Pages --- */
+.background-themed {
+    /* Ensure you have placed an image at static/img/exam_bg.jpg */
+    background: url('../img/exam_bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    background-color: rgba(243, 244, 246, 0.85); /* Fallback and slight tint */
+    background-blend-mode: overlay;
+}
+
+/* Ensure content containers remain readable on a themed background */
+.background-themed .card, 
+.background-themed .dashboard-container {
+    background-color: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(2px);
+    border-radius: 12px;
+}

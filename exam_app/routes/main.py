@@ -145,3 +145,9 @@ def exam_results():
     results = session.pop('last_exam_results', None)
     if not results: return redirect(url_for('main.dashboard'))
     return render_template('exam_results.html', results=results)
+
+@bp.route('/about')
+def about():
+    # If the user is not logged in, redirect them to the login page.
+    if not g.user: return redirect(url_for('auth.login'))
+    return render_template('about.html')

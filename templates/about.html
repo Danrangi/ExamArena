@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>About ExamArena</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='my_icon.ico') }}" type="image/x-icon">
+    <link href="{{ url_for('static', filename='vendor/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='vendor/css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/dashboard.css') }}" rel="stylesheet">
+</head>
+<body class="background-themed">
+    <div class="container py-5">
+        <div class="card p-5 shadow-lg mx-auto" style="max-width: 800px;">
+            <div class="text-center mb-4">
+                <h1 class="fw-bold text-success">ExamArena</h1>
+                <p class="text-muted fs-5">Developed at Suleja Digital Innovation Hub</p>
+                <hr>
+            </div>
+            
+            <h4 class="fw-bold mb-3">About the System</h4>
+            <p>ExamArena is a robust, Flask-based Computer Based Test (CBT) practice application designed to simulate Nigerian examination environments (JAMB, WAEC, NECO). It provides a realistic "War Room" exam interface for students and a comprehensive management panel for administrators.</p>
+
+            <h4 class="fw-bold mb-3 mt-4">Key Features</h4>
+            <ul>
+                <li>**"War Room" Exam Interface:** A distraction-free environment that mimics actual CBT software.</li>
+                <li>**JAMB Simulator:** Simultaneous testing of 4 subjects with a 120-minute strict timer and a built-in on-screen calculator.</li>
+                <li>**Detailed Results & Corrections:** Provides performance scores, visual progress, and correction mode with explanations.</li>
+                <li>**Secure Admin Panel:** Allows full management of subjects and questions (CRUD) with bulk CSV upload functionality.</li>
+            </ul>
+
+            <div class="text-center mt-5">
+                <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-primary btn-lg"><i class="fas fa-home me-2"></i> Go to Dashboard</a>
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='vendor/js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
