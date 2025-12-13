@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - EPS</title>
+    <link href="{{ url_for('static', filename='vendor/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='vendor/css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/forms.css') }}" rel="stylesheet">
+</head>
+<body class="d-flex align-items-center justify-content-center vh-100">
+    <div class="container" style="max-width: 400px;">
+        <div class="card login-card">
+            <div class="login-header">
+                <h3 class="text-primary mb-2"><i class="fas fa-graduation-cap"></i> EPS Login</h3>
+                <p class="text-muted">Enter your credentials to continue</p>
+            </div>
+            
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="alert alert-{{ category }} small py-2 shadow-sm rounded-3">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('auth.login') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                
+                <div class="mb-4">
+                    <label for="username" class="form-label">Username</label>
+                    <input type="text" class="form-control" id="username" name="username" placeholder="e.g. Student or Admin" required autofocus>
+                </div>
+                
+                <div class="mb-4">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primary w-100 py-2 shadow-sm">
+                    Sign In
+                </button>
+            </form>
+        </div>
+        <p class="text-center mt-4 text-muted small">&copy; 2025 Exam Practice System</p>
+    </div>
+    <script src="{{ url_for('static', filename='vendor/js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

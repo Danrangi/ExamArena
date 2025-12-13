@@ -1,0 +1,39 @@
+name: Build Windows Exe
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+
+    - name: Install Dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install pyinstaller
+
+    - name: Build with PyInstaller
+      run: |
+        # This command runs on a Windows Server in the cloud
+        # Note: We use semicolons (;) for separators on Windows
+        if (Test-Path "app_icon.ico") {
+            pyinstaller --name "ExamPracticeSystem" --add-data "templates;templates" --add-data "static;static" --icon "app_icon.ico" --onefile --windowed app.py
+        } else {
+            pyinstaller --name "ExamPracticeSystem" --add-data "templates;templates" --add-data "static;static" --onefile --windowed app.py
+        }
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: ExamPracticeSystem-Windows
+        path: dist/ExamPracticeSystem.exe

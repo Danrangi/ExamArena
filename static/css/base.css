@@ -1,0 +1,103 @@
+:root {
+    /* Brand Colors */
+    --jamb-green: #008751;
+    --waec-gold: #D4AF37;
+    --neco-blue: #0056b3;
+    
+    /* UX Colors */
+    --text-main: #111827;
+    --text-muted: #6b7280;
+    --surface: #ffffff;
+    --background: #f3f4f6;
+    --danger: #ef4444;
+    --success: #10b981;
+    --warning-bg: #fefce8;
+    
+    /* Dimensions */
+    --header-height: 70px;
+    --sidebar-width: 320px;
+    
+    /* Fonts */
+    --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+    --font-mono: 'Roboto Mono', monospace;
+}
+
+body {
+    background-color: var(--background);
+    color: var(--text-main);
+    font-family: var(--font-main);
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    overflow-x: hidden;
+}
+
+/* Utilities */
+.fw-bold { font-weight: 700; }
+.text-danger { color: var(--danger) !important; }
+.shadow-md { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); }
+
+/* --- CUSTOM SYSTEM ALERT (MODAL) --- */
+.sys-modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    z-index: 2000;
+    display: none; /* Hidden by default */
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.sys-modal-overlay.active {
+    display: flex;
+    opacity: 1;
+}
+
+.sys-modal-box {
+    background: white;
+    padding: 2rem;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    transform: scale(0.9);
+    transition: transform 0.3s ease;
+}
+
+.sys-modal-overlay.active .sys-modal-box {
+    transform: scale(1);
+}
+
+.sys-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: var(--warning-bg);
+}
+.sys-icon.danger { color: var(--danger); }
+.sys-icon.success { color: var(--success); }
+
+.sys-title { font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem; }
+.sys-msg { color: var(--text-muted); margin-bottom: 1.5rem; line-height: 1.5; }
+
+.sys-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.btn-sys {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+.btn-sys:active { transform: scale(0.95); }
+.btn-sys.cancel { background: #e5e7eb; color: var(--text-main); }
+.btn-sys.confirm { background: var(--jamb-green); color: white; }
+.btn-sys.danger { background: var(--danger); color: white; }

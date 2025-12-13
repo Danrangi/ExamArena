@@ -1,0 +1,71 @@
+.dashboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.welcome-banner {
+    margin-bottom: 3rem;
+}
+
+/* The Battle Cards */
+.exam-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.battle-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 1px solid #e5e7eb;
+    display: flex;
+    flex-direction: column;
+}
+
+.battle-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.card-banner {
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2.5rem;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+}
+
+/* Brand Specifics */
+.brand-jamb .card-banner { background: var(--jamb-green); }
+.brand-jamb .btn-action { background: var(--jamb-green); border-color: var(--jamb-green); }
+.brand-jamb .exam-title { color: var(--jamb-green); }
+
+.brand-waec .card-banner { background: var(--waec-gold); color: #000; }
+.brand-waec .btn-action { background: var(--waec-gold); border-color: var(--waec-gold); color: #000; }
+.brand-waec .exam-title { color: #b49018; }
+
+.brand-neco .card-banner { background: var(--neco-blue); }
+.brand-neco .btn-action { background: var(--neco-blue); border-color: var(--neco-blue); }
+.brand-neco .exam-title { color: var(--neco-blue); }
+
+.card-body { padding: 2rem; flex-grow: 1; display: flex; flex-direction: column; }
+.exam-title { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+.exam-meta { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem; }
+
+.btn-action {
+    width: 100%;
+    padding: 1rem;
+    font-weight: 700;
+    border-radius: 8px;
+    color: white;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: auto;
+}
+.btn-action:hover { opacity: 0.9; }
