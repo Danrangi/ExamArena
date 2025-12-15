@@ -107,13 +107,17 @@ body {
     /* Ensure you have placed an image at static/img/exam_bg.jpg */
     background: url('../img/exam_bg.jpg') no-repeat center center fixed;
     background-size: cover;
-    background-color: rgba(243, 244, 246, 0.85); /* Fallback and slight tint */
+    background-color: rgba(0, 0, 0, 0.2); /* Darker overlay for better text contrast */
     background-blend-mode: overlay;
 }
 
 /* Ensure content containers remain readable on a themed background */
-.background-themed .card, 
+.background-themed .card,
 .background-themed .dashboard-container {
+    background-color: rgba(255, 255, 255, 0.85); /* Reduced opacity for transparency */
+    backdrop-filter: blur(4px);
+    border-radius: 12px;
+}
     background-color: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(2px);
     border-radius: 12px;
