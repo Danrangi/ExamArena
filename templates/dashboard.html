@@ -24,7 +24,7 @@
         </div>
     </nav>
 
-    <div class="dashboard-container">
+    <div class="dashboard-container", border-radius: 4px;>
         <div class="welcome-banner text-center">
             <h1 class="fw-bold mb-2">Welcome to ExamArena</h1>
             <p class="text-muted fs-5">Select an examination body to begin your mock test.</p>
@@ -36,13 +36,13 @@
         {% endif %}
         {% endwith %}
 
-        <div class="exam-grid">
+        <div class="exam-grid", border-radius: 4px;>
             {% for exam in exams %}
             <div class="battle-card brand-{{ exam.name|lower }}">
-                <div class="card-banner">
+                <div class="card-banner",border-radius: 4px;>
                     {{ exam.name }}
                 </div>
-                <div class="card-body">
+                <div class="card-body", border-radius: 4px;>
                     <div class="text-center">
                         <div class="exam-title">{{ exam.name }} UTME</div>
                         <div class="exam-meta">
@@ -51,7 +51,7 @@
                         </div>
                     </div>
                     
-                    <div class="mt-auto">
+                    <div class="mt-auto", border-radius: 4px;>
                         {% if exam.name == 'JAMB' %}
                             <a href="{{ url_for('main.jamb_setup') }}" class="btn btn-action">Start JAMB Mock</a>
                         {% else %}
@@ -70,6 +70,7 @@
             {% endfor %}
         </div>
     </div>
+</div>
     <script src="{{ url_for('static', filename='vendor/js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>

@@ -164,3 +164,14 @@ body {
 .question-block {
     background-color: #ffffff !important; 
 }
+
+/* --- Dashboard Centering Fix --- */
+.dashboard-page-content {
+    /* Set minimum height to fill the remaining screen space */
+    min-height: calc(100vh - 70px); /* 100% viewport height minus header height (70px) */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+    align-items: center;    /* Center content horizontally (if width allows) */
+    padding: 20px 0; /* Add some vertical padding */
+}
