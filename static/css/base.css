@@ -130,8 +130,6 @@ body {
 
 /* --- Login Card Transparency Fix (High Specificity) --- */
 .login-card {
-    background-color: rgba(255, 255, 255, 0.85) !important; /* Semi-transparent White */
-    backdrop-filter: blur(5px) !important;
 }
 
 /* Ensure other parts of the card are transparent if needed, like the header */
@@ -142,8 +140,6 @@ body {
 /* --- HIGH PRIORITY TRANSPARENCY OVERRIDES --- */
 /* Affects Login Card */
 .login-card {
-    background-color: rgba(255, 255, 255, 0.8) !important; /* Semi-transparent White */
-    backdrop-filter: blur(8px) !important; /* Strong blur effect */
 }
 /* Affects Dashboard Cards and other primary containers */
 .background-themed .card, 
@@ -152,4 +148,19 @@ body {
     background-color: rgba(255, 255, 255, 0.85) !important;
     backdrop-filter: blur(4px) !important;
     border-radius: 12px;
+}
+
+/* --- Take Exam/Jamb Content Transparency Fix --- */
+
+/* This targets the content wrapper on single-subject exams */
+.background-themed-content {
+    background-color: #ffffff !important; /* Ensure main content is opaque white */
+    backdrop-filter: none !important; /* Remove blur from content */
+    border-radius: 8px;
+    padding: 20px 20px 50px 20px; /* Add padding inside the wrapper */
+    box-shadow: 0 0 15px rgba(0,0,0,0.1); /* Slight shadow to lift it from background */
+}
+/* Ensure question blocks themselves are opaque */
+.question-block {
+    background-color: #ffffff !important; 
 }

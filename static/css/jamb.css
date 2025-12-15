@@ -222,3 +222,23 @@
 .war-room-header {
     background-color: rgba(255, 255, 255, 0.95); /* Keep header nearly solid for visibility */
 }
+
+/* --- OPAQUE WAR ROOM CONTENT OVERRIDE --- */
+
+/* The main question display area */
+.main-stage {
+    background-color: #ffffff !important;
+    backdrop-filter: none !important;
+}
+
+/* The question map/palette sidebar */
+.nav-map {
+    background-color: #ffffff !important;
+    backdrop-filter: none !important;
+}
+
+/* The footer navigation area (Next/Previous buttons) */
+.war-room-container .position-fixed.bottom-0 {
+    background-color: #ffffff !important;
+    box-shadow: 0 -5px 10px rgba(0,0,0,0.05); /* Add lift to the navigation bar */
+}
