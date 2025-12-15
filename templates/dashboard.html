@@ -8,23 +8,60 @@
     <link href="{{ url_for('static', filename='vendor/css/all.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/dashboard.css') }}" rel="stylesheet">
+    
+    <style>
+        /* CSS to Center the Dashboard Container */
+        body {
+            display: flex; /* Use Flexbox for layout */
+            flex-direction: column; /* Stack children vertically (navbar then content) */
+            min-height: 100vh; /* Ensures body takes full viewport height */
+            margin: 0;
+            padding: 0;
+        }
+
+        .dashboard-container {
+            /* 1. Horizontal Centering */
+            margin-left: auto;
+            margin-right: auto;
+            
+            /* 2. Control max width to prevent it from spanning the whole page */
+            max-width: 1200px; /* Adjust this value */
+            width: 95%; /* Responsive width */
+            
+            /* Add some vertical space below the navbar */
+            padding-top: 25px; 
+            padding-bottom: 25px;
+            
+            /* Your existing visual style */
+            border-radius: 4px; 
+        }
+        
+        /* Ensure the exam grid respects the max width */
+        .exam-grid {
+             border-radius: 4px; 
+        }
+        /* Style adjustments for cards */
+        .battle-card .card-banner, .battle-card .card-body, .battle-card .mt-auto {
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body class="background-themed">
     <nav class="navbar navbar-expand-lg bg-white border-bottom py-3">
-        <div class="container", align-items: center;>
+        <div class="container" style="align-items: center;">
             <span class="navbar-brand fw-bold fs-4"><i class="fas fa-graduation-cap text-success"></i> ExamArena <small class="text-secondary fw-normal ms-2">by Suleja Digital Innovation Hub</small></span>
             <div class="ms-auto">
                 <span class="text-muted me-3">Candidate: <strong>{{ g.user }}</strong></span>
                 {% if g.user == admin_username %}
                     <a href="{{ url_for('admin.admin_panel') }}" class="btn btn-outline-dark btn-sm me-2">Admin</a>
-                <a href="{{ url_for('main.about') }}" class="btn btn-outline-dark btn-sm me-2">About</a>
                 {% endif %}
+                <a href="{{ url_for('main.about') }}" class="btn btn-outline-dark btn-sm me-2">About</a>
                 <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger btn-sm">Logout</a>
             </div>
         </div>
     </nav>
 
-    <div class="dashboard-container", border-radius: 4px>
+    <div class="dashboard-container">
         <div class="welcome-banner text-center">
             <h1 class="fw-bold mb-2">Welcome to ExamArena</h1>
             <p class="text-muted fs-5">Select an examination body to begin your mock test.</p>
@@ -36,13 +73,13 @@
         {% endif %}
         {% endwith %}
 
-        <div class="exam-grid", border-radius: 4px;>
+        <div class="exam-grid">
             {% for exam in exams %}
             <div class="battle-card brand-{{ exam.name|lower }}">
-                <div class="card-banner",border-radius: 4px;>
+                <div class="card-banner">
                     {{ exam.name }}
                 </div>
-                <div class="card-body", border-radius: 4px;>
+                <div class="card-body">
                     <div class="text-center">
                         <div class="exam-title">{{ exam.name }} UTME</div>
                         <div class="exam-meta">
@@ -51,7 +88,7 @@
                         </div>
                     </div>
                     
-                    <div class="mt-auto", border-radius: 4px;>
+                    <div class="mt-auto">
                         {% if exam.name == 'JAMB' %}
                             <a href="{{ url_for('main.jamb_setup') }}" class="btn btn-action">Start JAMB Mock</a>
                         {% else %}
@@ -70,7 +107,7 @@
             {% endfor %}
         </div>
     </div>
-</div>
+    
     <script src="{{ url_for('static', filename='vendor/js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>
