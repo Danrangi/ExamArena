@@ -9,26 +9,6 @@
     <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/dashboard.css') }}" rel="stylesheet">
 </head>
-<style>
-    /* 1. Center the wrapper horizontally and vertically on the page */
-body {
-    display: flex;
-    justify-content: center; /* Centers content horizontally */
-    align-items: center; /* Centers content vertically (optional) */
-    min-height: 100vh; /* Ensures the body uses the full viewport height */
-    margin: 0;
-}
-
-/* 2. Style the container to control its width */
-.dashboard-container {
-    /* Existing border-radius */
-    border-radius: 4px; 
-    /* Set a maximum width for the content */
-    max-width: 1200px; 
-    width: 90%;
-    padding: 20px;
-}
-</style>
 <body class="background-themed">
     <nav class="navbar navbar-expand-lg bg-white border-bottom py-3">
         <div class="container", align-items: center;>
@@ -43,8 +23,8 @@ body {
             </div>
         </div>
     </nav>
-<div class="main-content-wrapper">
-    <div class="dashboard-container" style="border-radius: 4px;">
+
+    <div class="dashboard-container", border-radius: 4px>
         <div class="welcome-banner text-center">
             <h1 class="fw-bold mb-2">Welcome to ExamArena</h1>
             <p class="text-muted fs-5">Select an examination body to begin your mock test.</p>
@@ -56,13 +36,13 @@ body {
         {% endif %}
         {% endwith %}
 
-        <div class="exam-grid" style="border-radius: 4px;">
+        <div class="exam-grid", border-radius: 4px;>
             {% for exam in exams %}
             <div class="battle-card brand-{{ exam.name|lower }}">
-                <div class="card-banner" style="border-radius: 4px;">
+                <div class="card-banner",border-radius: 4px;>
                     {{ exam.name }}
                 </div>
-                <div class="card-body" style="border-radius: 4px;">
+                <div class="card-body", border-radius: 4px;>
                     <div class="text-center">
                         <div class="exam-title">{{ exam.name }} UTME</div>
                         <div class="exam-meta">
@@ -71,7 +51,7 @@ body {
                         </div>
                     </div>
                     
-                    <div class="mt-auto" style="border-radius: 4px;">
+                    <div class="mt-auto", border-radius: 4px;>
                         {% if exam.name == 'JAMB' %}
                             <a href="{{ url_for('main.jamb_setup') }}" class="btn btn-action">Start JAMB Mock</a>
                         {% else %}
