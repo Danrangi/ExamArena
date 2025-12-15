@@ -175,3 +175,15 @@ body {
     align-items: center;    /* Center content horizontally (if width allows) */
     padding: 20px 0; /* Add some vertical padding */
 }
+
+/* --- Dashboard Vertical Centering Wrapper (Final) --- */
+.dashboard-page-content {
+    /* Calculates height minus the navbar height (approx 70px) */
+    min-height: calc(100vh - 70px); 
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Centers content vertically */
+    align-items: center;    /* Centers content horizontally */
+    padding: 20px 0; /* Ensures content isn't flush against top/bottom */
+    width: 100%; /* Important for horizontal centering to work */
+}

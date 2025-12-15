@@ -2,38 +2,102 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>About ExamArena</title>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='my_icon.ico') }}" type="image/x-icon">
+    <title>About – ExamArena</title>
+<link rel="shortcut icon" href="{{ url_for('static', filename='my_icon.ico') }}" type="image/x-icon">
     <link href="{{ url_for('static', filename='vendor/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='vendor/css/all.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/dashboard.css') }}" rel="stylesheet">
 </head>
+
 <body class="background-themed">
-    <div class="container py-5">
-        <div class="card p-5 shadow-lg mx-auto" style="max-width: 800px;">
-            <div class="text-center mb-4">
-                <h1 class="fw-bold text-success">ExamArena</h1>
-                <p class="text-muted fs-5">Developed at Suleja Digital Innovation Hub</p>
-                <hr>
-            </div>
-            
-            <h4 class="fw-bold mb-3">About the System</h4>
-            <p>ExamArena is a robust, Flask-based Computer Based Test (CBT) practice application designed to simulate Nigerian examination environments (JAMB, WAEC, NECO). It provides a realistic "War Room" exam interface for students and a comprehensive management panel for administrators.</p>
 
-            <h4 class="fw-bold mb-3 mt-4">Key Features</h4>
-            <ul>
-                <li>**"War Room" Exam Interface:** A distraction-free environment that mimics actual CBT software.</li>
-                <li>**JAMB Simulator:** Simultaneous testing of 4 subjects with a 120-minute strict timer and a built-in on-screen calculator.</li>
-                <li>**Detailed Results & Corrections:** Provides performance scores, visual progress, and correction mode with explanations.</li>
-                <li>**Secure Admin Panel:** Allows full management of subjects and questions (CRUD) with bulk CSV upload functionality.</li>
-            </ul>
+<nav class="navbar navbar-expand-lg bg-white border-bottom py-3">
+    <div class="container">
+        <span class="navbar-brand fw-bold fs-4">
+            <i class="fas fa-graduation-cap text-success"></i>
+            ExamArena
+            <small class="text-secondary fw-normal ms-2">
+                by Suleja Digital Innovation Hub
+            </small>
+        </span>
 
-            <div class="text-center mt-5">
-                <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-primary btn-lg"><i class="fas fa-home me-2"></i> Go to Dashboard</a>
-            </div>
+        <div class="ms-auto">yth
+            <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-dark btn-sm me-2">
+                Dashboard
+            </a>
+            <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger btn-sm">
+                Logout
+            </a>
         </div>
     </div>
-    <script src="{{ url_for('static', filename='vendor/js/bootstrap.bundle.min.js') }}"></script>
+</nav>
+
+<div class="container py-5" style="max-width: 900px;">
+    <div class="card shadow-sm border-0 rounded-3">
+        <div class="card-body p-4 p-md-5">
+
+            <h2 class="fw-bold mb-3">About ExamArena</h2>
+            <p class="text-muted fs-6">
+                <strong>ExamArena</strong> is a computer-based testing (CBT) and exam
+                preparation platform designed to simulate real examination environments
+                such as JAMB, WAEC, and NECO.
+            </p>
+
+            <p class="text-muted">
+                The system is built to run efficiently in offline and local network (LAN)
+                environments, making it suitable for cyber cafés, school computer labs,
+                and tutorial centers.
+            </p>
+
+            <hr class="my-4">
+
+            <h5 class="fw-bold">Key Features</h5>
+            <ul class="text-muted">
+                <li>Realistic CBT exam simulation</li>
+                <li>Multi-user access over local network</li>
+                <li>Student account management</li>
+                <li>Automated scoring and result analysis</li>
+                <li>Offline-first design for reliable use</li>
+                <li>AI-assisted performance analysis (available in supported versions)</li>
+            </ul>
+
+            <hr class="my-4">
+
+            <h5 class="fw-bold">AI-Powered Learning Support</h5>
+            <p class="text-muted">
+                ExamArena integrates intelligent analysis tools that evaluate student
+                performance after exams. The system identifies weak areas and recommends
+                topics that require more attention.
+            </p>
+
+            <p class="text-muted">
+                Advanced versions of ExamArena also include an optional AI Tutor that
+                helps students understand difficult topics, provides study guidance,
+                and suggests learning materials.
+            </p>
+
+            <hr class="my-4">
+
+            <h5 class="fw-bold">About Suleja Digital Innovation Hub</h5>
+            <p class="text-muted">
+                ExamArena was developed at <strong>Suleja Digital Innovation Hub</strong>,
+                a technology and innovation center focused on training individuals in
+                digital skills and building practical software solutions.
+            </p>
+
+            <p class="text-muted">
+                The hub supports the development of systems, platforms, and services
+                aimed at solving real-world problems through technology.
+            </p>
+
+        </div>
+    </div>
+
+    <p class="text-center text-muted small mt-4">
+        © 2025 ExamArena. Developed by Suleja Digital Innovation Hub.
+    </p>
+</div>
+
+<script src="{{ url_for('static', filename='vendor/js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>

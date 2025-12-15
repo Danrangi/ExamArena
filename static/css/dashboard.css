@@ -73,3 +73,41 @@
     margin-top: auto;
 }
 .btn-action:hover { opacity: 0.9; }
+
+/* --- Dashboard Centering Simplification (Final) --- */
+.dashboard-container {
+    /* Calculates height minus the navbar height (approx 70px) and padding */
+    min-height: calc(100vh - 70px - 4rem); 
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+    align-items: center;    /* Center content horizontally */
+    
+    max-width: 1000px; 
+    margin: 0 auto; 
+    padding: 2rem; /* Keep existing padding */
+}
+
+/* Ensure the exam grid centers horizontally inside its container */
+.exam-grid {
+    margin: 0 auto;
+}
+
+/* --- Dashboard Centering Simplification (Final) --- */
+.dashboard-container {
+    /* Calculates height minus the navbar height (approx 70px) and padding */
+    min-height: calc(100vh - 70px - 4rem); 
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+    align-items: center;    /* Center content horizontally */
+    
+    max-width: 1000px; 
+    margin: 0 auto; 
+    padding: 2rem; /* Keep existing padding */
+}
+
+/* Ensure the exam grid centers horizontally inside its container */
+.exam-grid {
+    margin: 0 auto;
+}
