@@ -187,3 +187,16 @@ body {
     padding: 20px 0; /* Ensures content isn't flush against top/bottom */
     width: 100%; /* Important for horizontal centering to work */
 }
+
+/* --- Custom Logo Image Styling --- */
+.logo-icon-replacement {
+    height: 1.25em;
+    width: auto;
+    vertical-align: middle;
+}
+/* Custom sizing for the large logo on the login page */
+.logo-icon-replacement {
+    height: 1.25em;
+    width: auto;
+    vertical-align: middle;
+}
