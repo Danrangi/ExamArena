@@ -9,7 +9,7 @@
     <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/jamb.css') }}" rel="stylesheet">
 </head>
-<body>
+<body class="background-themed">
     <form method="POST" id="examForm">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 

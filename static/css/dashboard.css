@@ -13,6 +13,10 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 2rem;
+    justify-items: center; /* Centers cards within their grid cell */
+    max-width: 1000px; /* Constrain width for centering */
+    margin: 0 auto; /* Center the grid container itself */
+}
 }
 
 .battle-card {

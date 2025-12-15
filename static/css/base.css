@@ -104,10 +104,15 @@ body {
 
 /* --- Custom Background for Themed Pages --- */
 .background-themed {
+    background: url('../img/exam_bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    background-color: rgba(0, 0, 0, 0.4); /* Dark overlay for text contrast */
+    background-blend-mode: overlay;
+}
     /* Ensure you have placed an image at static/img/exam_bg.jpg */
     background: url('../img/exam_bg.jpg') no-repeat center center fixed;
     background-size: cover;
-    background-color: rgba(0, 0, 0, 0.2); /* Darker overlay for better text contrast */
+    background-color: rgba(0, 0, 0, 0.4); /* Darker overlay for better text contrast */
     background-blend-mode: overlay;
 }
 
@@ -120,5 +125,31 @@ body {
 }
     background-color: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(2px);
+    border-radius: 12px;
+}
+
+/* --- Login Card Transparency Fix (High Specificity) --- */
+.login-card {
+    background-color: rgba(255, 255, 255, 0.85) !important; /* Semi-transparent White */
+    backdrop-filter: blur(5px) !important;
+}
+
+/* Ensure other parts of the card are transparent if needed, like the header */
+.login-card .login-header {
+    background-color: transparent !important;
+}
+
+/* --- HIGH PRIORITY TRANSPARENCY OVERRIDES --- */
+/* Affects Login Card */
+.login-card {
+    background-color: rgba(255, 255, 255, 0.8) !important; /* Semi-transparent White */
+    backdrop-filter: blur(8px) !important; /* Strong blur effect */
+}
+/* Affects Dashboard Cards and other primary containers */
+.background-themed .card, 
+.background-themed .dashboard-container,
+.background-themed .container.background-themed-content {
+    background-color: rgba(255, 255, 255, 0.85) !important;
+    backdrop-filter: blur(4px) !important;
     border-radius: 12px;
 }

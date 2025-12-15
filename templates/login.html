@@ -10,7 +10,7 @@
     <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/forms.css') }}" rel="stylesheet">
 </head>
-<body class="d-flex align-items-center justify-content-center vh-100">
+<body class="d-flex align-items-center justify-content-center vh-100 background-themed">
     <div class="container" style="max-width: 400px;">
         <div class="card login-card">
             <div class="login-header">
@@ -39,9 +39,10 @@
                     <input type="password" class="form-control" id="password" name="password" placeholder="••••••••" required>
                 </div>
                 
-<a href="{{ url_for('main.about') }}" class="btn btn-outline-secondary w-100 py-2 mb-3">About ExamArena</a>
-                <button type="submit" class="btn btn-primary w-100 py-2 shadow-sm">
+                <button type="submit" class="btn btn-primary w-100 py-2 shadow-sm mb-3">
                     Sign In
+                </button>
+                <a href="{{ url_for('main.about') }}" class="btn btn-outline-secondary w-100 py-2">About ExamArena</a>
                 </button>
             </form>
         </div>

@@ -205,3 +205,20 @@
 .calc-btn.op { background: #f59e0b; color: white; }
 .calc-btn.eq { background: var(--jamb-green); color: white; grid-column: span 2; }
 .calc-btn.clr { background: var(--danger); color: white; }
+
+/* --- Transparent Background Fix for War Room Content --- */
+.war-room-container {
+    padding: 0 !important; /* Remove excessive padding that conflicts with background */
+}
+.main-stage, .nav-map {
+    background-color: rgba(255, 255, 255, 0.85); /* Semi-transparent content area */
+    backdrop-filter: blur(4px);
+    border-radius: 8px;
+    height: 100%;
+}
+.nav-map {
+    padding: 10px;
+}
+.war-room-header {
+    background-color: rgba(255, 255, 255, 0.95); /* Keep header nearly solid for visibility */
+}
