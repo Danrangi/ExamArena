@@ -25,7 +25,7 @@
             /* This targets the existing '.login-card' class logic in base.css for transparency */
             padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 5px 15px rgba(248, 3, 3, 0.2);
             width: 350px;
             text-align: center;
         }
@@ -132,10 +132,8 @@
             <button type="submit" class="login-button">Sign In</button>
         </form>
 
-        <a href="javascript:void(0)" class="info-link" style="color: #6c757d;">Forgot Password? (Not Available)</a>
-
-        <p class="no-account-text">Know more about the system:</p>
-        <a href="{{ url_for('main.about') }}" class="about-button">About ExamArena</a>
+        <p class="no-account-text">Know more about the system and us:</p>
+        <a href="{{ url_for('/about') }}" class="about-button">About ExamArena and us</a>
     </div>
 
     <p class="footer-text">
