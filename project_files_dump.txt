@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - ExamArena</title>
-<link rel="shortcut icon" href="{{ url_for('static', filename='my_icon.ico') }}" type="image/x-icon">
+<link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.jpg') }}" type="image/x-icon">
     <link href="{{ url_for('static', filename='vendor/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='vendor/css/all.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
@@ -109,7 +109,7 @@
 </head>
 <body class="background-themed">
     <div class="header">
-        <div class="header-logo" title="ExamArena"><i class="fas fa-graduation-cap"></i></div>
+        <div class="header-logo" title="ExamArena"><img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="ExamArena Logo" class="logo-icon-replacement"></div>
     </div>
 
     <div class="login-container login-card">
@@ -149,6 +149,81 @@
 </html>
 
 
+--- FILE: ./templates/ai_preview.html ---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Analysis - Coming Soon</title>
+    <link href="{{ url_for('static', filename='vendor/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='vendor/css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
+    <style>
+        .construction-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+        .construction-card {
+            background: white;
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 90%;
+        }
+        .icon-box {
+            font-size: 5rem;
+            color: #6366f1; /* AI Purple */
+            margin-bottom: 1.5rem;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0px); }
+        }
+        .badge-coming-soon {
+            background: #e0e7ff;
+            color: #4338ca;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+    </style>
+</head>
+<body>
+    <div class="construction-container">
+        <div class="construction-card">
+            <span class="badge-coming-soon">Beta Feature</span>
+            <div class="icon-box">
+                <i class="fas fa-robot"></i>
+            </div>
+            <h2 class="fw-bold mb-3">AI Performance Analysis</h2>
+            <p class="text-muted mb-4">
+                We are building an intelligent system to analyze your exam patterns, 
+                predict your strengths, and recommend study topics.
+            </p>
+            <div class="d-grid gap-2">
+                <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary fw-bold py-2">
+                    <i class="fas fa-arrow-left me-2"></i> Return to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
 --- FILE: ./templates/jamb_setup.html ---
 
 <!DOCTYPE html>
@@ -156,7 +231,7 @@
 <head>
     <meta charset="UTF-8">
     <title>JAMB Subject Selection</title>
-<link rel="shortcut icon" href="{{ url_for('static', filename='my_icon.ico') }}" type="image/x-icon">
+<link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.jpg') }}" type="image/x-icon">
     <link href="{{ url_for('static', filename='vendor/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='vendor/css/all.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
@@ -222,106 +297,95 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Results - Performance Analysis</title>
-<link rel="shortcut icon" href="{{ url_for('static', filename='my_icon.ico') }}" type="image/x-icon">
+    <title>Exam Results</title>
     <link href="{{ url_for('static', filename='vendor/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='vendor/css/all.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/results.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/all.min.css') }}">
+    <style>
+        .btn-ai {
+            background-color: #6366f1;
+            color: white;
+            border: none;
+        }
+        .btn-ai:hover {
+            background-color: #4f46e5;
+            color: white;
+        }
+    </style>
 </head>
-<body>
-    <div class="result-container">
-        <div class="performance-card">
-            <h1 class="text-primary fw-bold mb-3"><i class="fas fa-chart-line"></i> Performance Report</h1>
-            <h4 class="text-muted">{{ results.subject_name }}</h4>
-            
-            {% set percent = (results.score / results.total_questions * 100) if results.total_questions > 0 else 0 %}
-            
-            <div class="d-flex justify-content-center align-items-baseline gap-2 mt-4">
-                <span class="display-3 fw-bold {{ 'text-success' if percent >= 50 else 'text-danger' }}">
-                    {{ "%.1f"|format(percent) }}%
-                </span>
-                <span class="text-muted fs-5">Total Score</span>
-            </div>
-
-            <div class="score-chart">
-                <div class="score-bar" style="width: {{ percent }}%;"></div>
-            </div>
-            
-            <div class="row mt-4">
-                <div class="col-4 border-end">
-                    <div class="fw-bold fs-4">{{ results.score }}</div>
-                    <div class="small text-muted">Correct</div>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0 mb-4 overflow-hidden">
+                    <div class="card-header bg-white text-center py-4 border-bottom-0">
+                        <h5 class="text-muted text-uppercase small fw-bold mb-2">{{ results.subject_name }}</h5>
+                        <h1 class="display-1 fw-bold {{ 'text-success' if (results.score / results.total_questions * 100) >= 50 else 'text-danger' }}">
+                            {{ ((results.score / results.total_questions) * 100)|round|int }}%
+                        </h1>
+                        <p class="lead mb-0">You scored <strong>{{ results.score }}</strong> out of <strong>{{ results.total_questions }}</strong></p>
+                    </div>
+                    
+                    <div class="card-body bg-light border-top d-flex gap-3 justify-content-center py-4">
+                        <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-secondary px-4 fw-bold">
+                            <i class="fas fa-home me-2"></i> Dashboard
+                        </a>
+                        
+                        <a href="{{ url_for('main.ai_preview') }}" class="btn btn-ai px-4 fw-bold shadow-sm">
+                            <i class="fas fa-robot me-2"></i> AI Preview
+                        </a>
+                    </div>
                 </div>
-                <div class="col-4 border-end">
-                    <div class="fw-bold fs-4">{{ results.total_questions - results.score }}</div>
-                    <div class="small text-muted">Wrong</div>
-                </div>
-                <div class="col-4">
-                    <div class="fw-bold fs-4">{{ results.total_questions }}</div>
-                    <div class="small text-muted">Total</div>
-                </div>
-            </div>
-        </div>
 
-        <h3 class="mb-4 ps-2 border-start border-5 border-primary">Corrections & Explanations</h3>
-
-        {% for subject, items in results.results_list|sort(attribute='subject_name')|groupby('subject_name') %}
-            <div class="mb-5">
-                <h4 class="text-muted text-uppercase fw-bold mb-3 ls-1"><i class="fas fa-book me-2"></i> {{ subject }}</h4>
+                <h4 class="mb-4 fw-bold text-secondary"><i class="fas fa-check-double me-2"></i>Corrections & Explanations</h4>
                 
-                {% for result in items %}
-                <div class="correction-box {{ 'correct' if result.is_correct else 'wrong' }}">
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="badge bg-light text-dark border">Q{{ loop.index }}</span>
-                        {% if result.is_correct %}
-                            <span class="badge bg-success"><i class="fas fa-check"></i> Correct</span>
-                        {% else %}
-                            <span class="badge bg-danger"><i class="fas fa-times"></i> Failed</span>
+                {% for res in results.results_list %}
+                <div class="card shadow-sm border-0 mb-3 question-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <span class="badge {{ 'bg-success' if res.is_correct else 'bg-danger' }} mb-2">
+                                {{ 'Correct' if res.is_correct else 'Incorrect' }}
+                            </span>
+                            <span class="text-muted small">Q{{ loop.index }}</span>
+                        </div>
+                        
+                        <h5 class="card-title mb-3 text-dark">{{ res.question_text }}</h5>
+                        
+                        <div class="row g-2 mb-3">
+                            <div class="col-md-6">
+                                <div class="p-2 rounded border {{ 'bg-success text-white border-success' if res.is_correct else 'bg-light text-muted' }}">
+                                    <small class="d-block fw-bold text-uppercase">Your Answer</small>
+                                    {{ res.user_answer if res.user_answer else 'No Answer' }}
+                                    {% if res.user_answer and res.options[res.user_answer] %}
+                                        - {{ res.options[res.user_answer] }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-2 rounded border bg-opacity-10 {{ 'bg-success text-success border-success' if not res.is_correct else 'bg-light text-muted' }}">
+                                    <small class="d-block fw-bold text-uppercase">Correct Answer</small>
+                                    {{ res.correct_answer }} - {{ res.options[res.correct_answer] }}
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if res.explanation %}
+                        <div class="alert alert-info d-flex align-items-start small mb-0">
+                            <i class="fas fa-lightbulb text-info me-2 mt-1"></i>
+                            <div>
+                                <strong>Explanation:</strong><br>
+                                {{ res.explanation }}
+                            </div>
+                        </div>
                         {% endif %}
                     </div>
-                    
-                    <p class="fw-bold fs-5 mb-3">{{ result.question_text }}</p>
-                    
-                    <div class="row g-2">
-                        <div class="col-md-6">
-                            <div class="p-2 border rounded {{ 'bg-success text-white border-success' if result.correct_answer == 'A' else '' }} {{ 'bg-danger text-white' if result.user_answer == 'A' and not result.is_correct else '' }}">
-                                A. {{ result.options.A }}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="p-2 border rounded {{ 'bg-success text-white border-success' if result.correct_answer == 'B' else '' }} {{ 'bg-danger text-white' if result.user_answer == 'B' and not result.is_correct else '' }}">
-                                B. {{ result.options.B }}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="p-2 border rounded {{ 'bg-success text-white border-success' if result.correct_answer == 'C' else '' }} {{ 'bg-danger text-white' if result.user_answer == 'C' and not result.is_correct else '' }}">
-                                C. {{ result.options.C }}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="p-2 border rounded {{ 'bg-success text-white border-success' if result.correct_answer == 'D' else '' }} {{ 'bg-danger text-white' if result.user_answer == 'D' and not result.is_correct else '' }}">
-                                D. {{ result.options.D }}
-                            </div>
-                        </div>
-                    </div>
-
-                    {% if result.explanation %}
-                    <div class="explanation">
-                        <strong><i class="fas fa-lightbulb"></i> Why?</strong> {{ result.explanation }}
-                    </div>
-                    {% endif %}
                 </div>
                 {% endfor %}
             </div>
-        {% endfor %}
-
-        <div class="text-center py-5">
-            <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary px-5 py-3 fw-bold rounded-pill">
-                <i class="fas fa-arrow-left me-2"></i> Return to Dashboard
-            </a>
         </div>
     </div>
+    <script src="{{ url_for('static', filename='vendor/js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>
 
@@ -333,7 +397,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Manage Questions</title>
-<link rel="shortcut icon" href="{{ url_for('static', filename='my_icon.ico') }}" type="image/x-icon">
+<link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.jpg') }}" type="image/x-icon">
     <link href="{{ url_for('static', filename='vendor/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='vendor/css/all.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
@@ -439,7 +503,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit Question</title>
-<link rel="shortcut icon" href="{{ url_for('static', filename='my_icon.ico') }}" type="image/x-icon">
+<link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.jpg') }}" type="image/x-icon">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
@@ -497,14 +561,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>JAMB War Room</title>
-<link rel="shortcut icon" href="{{ url_for('static', filename='my_icon.ico') }}" type="image/x-icon">
+    <title>Exam War Room</title>
     <link href="{{ url_for('static', filename='vendor/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='vendor/css/all.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/jamb.css') }}" rel="stylesheet">
 </head>
-<body class="background-themed">
+<body>
     <form method="POST" id="examForm">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
@@ -534,7 +597,7 @@
             </div>
 
             <div class="d-flex align-items-center gap-3">
-                <div id="timer" class="timer-display shadow-inner">02:00:00</div>
+                <div id="timer" class="timer-display shadow-inner">00:00:00</div>
                 <button type="button" class="btn btn-danger px-3 fw-bold" onclick="openAlert()">
                     Submit
                 </button>
@@ -544,34 +607,30 @@
         <div class="war-room-container">
             <div class="main-stage">
                 <div class="tab-content h-100">
-                    {% for subject_name, questions in exam_data.items() %}
+                    {% for subject_name, items in exam_data.items() %}
                     {% set subject_index = loop.index %}
                     <div class="tab-pane fade h-100 {% if loop.first %}show active{% endif %}" id="content-{{ subject_index }}">
                         <div class="h-100" style="overflow-y: auto; padding-bottom: 80px;" id="scroll-{{ subject_index }}">
-                            {% if questions %}
-                                {% for q in questions %}
-                                <div class="question-block mb-5" id="q-{{ subject_index }}-{{ loop.index }}">
+                            {% if items %}
+                                {% for item in items %}
+                                {% set question_index = loop.index %}
+                                
+                                <div class="question-block mb-5" id="q-{{ subject_index }}-{{ question_index }}">
                                     <div class="d-flex align-items-center mb-3">
-                                        <span class="badge bg-secondary me-2 rounded-pill">Question {{ loop.index }}</span>
+                                        <span class="badge bg-secondary me-2 rounded-pill">Question {{ question_index }}</span>
                                     </div>
-                                    <div class="question-text">{{ q.question_text }}</div>
+                                    <div class="question-text">{{ item.q.question_text }}</div>
+                                    
                                     <div class="options-list">
-                                        <div class="option-card" onclick="selectOption('q_{{ q.id }}', 'A', this, {{ subject_index }}, {{ loop.index }})">
-                                            <input type="radio" name="q_{{ q.id }}" value="A" class="d-none">
-                                            <span class="fw-bold me-3 text-muted">A.</span> {{ q.option_a }}
+                                        {% for opt in item.opts %}
+                                        {% set labels = ['A', 'B', 'C', 'D'] %}
+                                        {% set visual_label = labels[loop.index0] if loop.index0 < 4 else '?' %}
+                                        
+                                        <div class="option-card" onclick="selectOption('q_{{ item.q.id }}', '{{ opt.key }}', this, {{ subject_index }}, {{ question_index }})">
+                                            <input type="radio" name="q_{{ item.q.id }}" value="{{ opt.key }}" class="d-none">
+                                            <span class="fw-bold me-3 text-muted">{{ visual_label }}.</span> {{ opt.text }}
                                         </div>
-                                        <div class="option-card" onclick="selectOption('q_{{ q.id }}', 'B', this, {{ subject_index }}, {{ loop.index }})">
-                                            <input type="radio" name="q_{{ q.id }}" value="B" class="d-none">
-                                            <span class="fw-bold me-3 text-muted">B.</span> {{ q.option_b }}
-                                        </div>
-                                        <div class="option-card" onclick="selectOption('q_{{ q.id }}', 'C', this, {{ subject_index }}, {{ loop.index }})">
-                                            <input type="radio" name="q_{{ q.id }}" value="C" class="d-none">
-                                            <span class="fw-bold me-3 text-muted">C.</span> {{ q.option_c }}
-                                        </div>
-                                        <div class="option-card" onclick="selectOption('q_{{ q.id }}', 'D', this, {{ subject_index }}, {{ loop.index }})">
-                                            <input type="radio" name="q_{{ q.id }}" value="D" class="d-none">
-                                            <span class="fw-bold me-3 text-muted">D.</span> {{ q.option_d }}
-                                        </div>
+                                        {% endfor %}
                                     </div>
                                 </div>
                                 <hr class="border-light my-5">
@@ -596,10 +655,10 @@
             <div class="nav-map">
                 <div class="map-header">Question Map</div>
                 <div class="grid-container">
-                    {% for subject_name, questions in exam_data.items() %}
+                    {% for subject_name, items in exam_data.items() %}
                     {% set subject_index = loop.index %}
                     <div class="question-grid subject-palette {% if not loop.first %}d-none{% endif %}" id="palette-{{ subject_index }}">
-                        {% for q in questions %}
+                        {% for item in items %}
                         <a href="javascript:void(0)" 
                            onclick="scrollToQuestion({{ subject_index }}, {{ loop.index }})"
                            class="grid-btn" 
@@ -665,6 +724,7 @@
         function selectOption(inputName, value, card, subjectIndex, questionIndex) {
             const radio = card.querySelector('input[type="radio"]');
             radio.checked = true;
+            radio.value = value;
             const container = card.parentElement;
             container.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
             card.classList.add('selected');
@@ -676,7 +736,7 @@
         function switchTab(index, btn) {
             currentSubjectIdx = index;
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            if(btn) btn.classList.add('active');
             document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('show', 'active'));
             document.getElementById(`content-${index}`).classList.add('show', 'active');
             document.querySelectorAll('.question-grid').forEach(g => g.classList.add('d-none'));
@@ -697,7 +757,9 @@
             if (e.key.toLowerCase() === 'p') navQuestion(-1);
         });
 
-        let totalSeconds = 120 * 60; 
+        const isJamb = "{{ mode }}" === "JAMB";
+        let totalSeconds = isJamb ? (120 * 60) : (60 * 60); 
+        
         const timerElem = document.getElementById('timer');
         setInterval(() => {
             if (totalSeconds <= 0) { finalSubmit(); return; }
@@ -723,6 +785,9 @@
 </body>
 </html>
 
+# Also update the single exam template to match
+cp templates/take_jamb.html templates/take_exam.html
+
 
 --- FILE: ./templates/admin_panel.html ---
 
@@ -731,7 +796,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Admin Panel</title>
-<link rel="shortcut icon" href="{{ url_for('static', filename='my_icon.ico') }}" type="image/x-icon">
+<link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.jpg') }}" type="image/x-icon">
     <link href="{{ url_for('static', filename='vendor/css/bootstrap.min.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/all.min.css') }}">
     <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
@@ -830,7 +895,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Take Exam - {{ subject.name }}</title>
-<link rel="shortcut icon" href="{{ url_for('static', filename='my_icon.ico') }}" type="image/x-icon">
+<link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.jpg') }}" type="image/x-icon">
     <link href="{{ url_for('static', filename='vendor/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='vendor/css/all.min.css') }}" rel="stylesheet">
     <style>
@@ -925,8 +990,93 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <title>Dashboard - ExamArena</title>
+    <link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.jpg') }}" type="image/x-icon">
+    <link href="{{ url_for('static', filename='vendor/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='vendor/css/all.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='css/dashboard.css') }}" rel="stylesheet">
+</head>
+<body class="background-themed">
+
+    <nav class="navbar navbar-expand-lg bg-white border-bottom py-3">
+        <div class="container">
+            <span class="navbar-brand fw-bold fs-4">
+                <img src="{{ url_for('static', filename='img/logo.jpg') }}" alt="ExamArena Logo" class="logo-icon-replacement me-2"> ExamArena
+                <small class="text-secondary fw-normal ms-2">by Suleja Digital Innovation Hub</small>
+            </span>
+            <div class="ms-auto">
+                <span class="text-muted me-3">Candidate: <strong>{{ g.user }}</strong></span>
+                {% if g.user == admin_username %}
+                    <a href="{{ url_for('admin.admin_panel') }}" class="btn btn-outline-dark btn-sm me-2">Admin</a>
+                {% endif %}
+                <a href="{{ url_for('main.about') }}" class="btn btn-outline-dark btn-sm me-2">About</a>
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger btn-sm">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="dashboard-page-content">
+        <div class="dashboard-container", align ="center";>
+            <div class="welcome-banner text-center">
+                <h1 class="fw-bold mb-2">Welcome to ExamArena</h1>
+                <p class="text-muted fs-5">Select an examination body to begin your mock test.</p>
+            </div>
+    
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}<div class="alert alert-{{ category }} text-center mb-4">{{ message }}</div>{% endfor %}
+            {% endif %}
+            {% endwith %}
+    
+            <div class="exam-grid">
+                {% for exam in exams %}
+                <div class="battle-card brand-{{ exam.name|lower }}">
+                    <div class="card-banner">
+                        {{ exam.name }}
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center">
+                            <div class="exam-title">{{ exam.name }} UTME</div>
+                            <div class="exam-meta">
+                                <i class="far fa-clock me-1"></i> {{ '2 Hours' if exam.name == 'JAMB' else 'Standard Time' }} &bull; 
+                                <i class="far fa-file-alt me-1"></i> {{ '180' if exam.name == 'JAMB' else 'Multi' }} Questions
+                            </div>
+                        </div>
+                        
+                        <div class="mt-auto">
+                            {% if exam.name == 'JAMB' %}
+                                <a href="{{ url_for('main.jamb_setup') }}" class="btn btn-action">Start JAMB Mock</a>
+                            {% else %}
+                                <button class="btn btn-action dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                    Select Subject
+                                </button>
+                                <ul class="dropdown-menu w-100 shadow border-0">
+                                    {% for subject in exam.subjects %}
+                                    <li><a class="dropdown-item py-2" href="{{ url_for('main.take_exam', subject_id=subject.id) }}">{{ subject.name }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='vendor/js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
+
+
+--- FILE: ./templates/about.html ---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
     <title>About – ExamArena</title>
-    <link rel="shortcut icon" href="{{ url_for('static', filename='my_icon.ico') }}" type="image/x-icon">
+<link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.jpg') }}" type="image/x-icon">
     <link href="{{ url_for('static', filename='vendor/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='vendor/css/all.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
@@ -937,7 +1087,7 @@
 <nav class="navbar navbar-expand-lg bg-white border-bottom py-3">
     <div class="container">
         <span class="navbar-brand fw-bold fs-4">
-            <i class="fas fa-graduation-cap text-success"></i>
+            <img src="{{ url_for('static', filename='my_icon.ico.jpg') }}" alt="ExamArena Logo" class="logo-icon-replacement me-2">
             ExamArena
             <small class="text-secondary fw-normal ms-2">
                 by Suleja Digital Innovation Hub
@@ -1026,113 +1176,6 @@
 </html>
 
 
---- FILE: ./templates/about.html ---
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>About – ExamArena</title>
-<link rel="shortcut icon" href="{{ url_for('static', filename='my_icon.ico') }}" type="image/x-icon">
-    <link href="{{ url_for('static', filename='vendor/css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='vendor/css/all.min.css') }}" rel="stylesheet">
-    <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
-</head>
-
-<body class="background-themed">
-
-<nav class="navbar navbar-expand-lg bg-white border-bottom py-3">
-    <div class="container">
-        <span class="navbar-brand fw-bold fs-4">
-            <i class="fas fa-graduation-cap text-success"></i>
-            ExamArena
-            <small class="text-secondary fw-normal ms-2">
-                by Suleja Digital Innovation Hub
-            </small>
-        </span>
-
-        <div class="ms-auto">yth
-            <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-dark btn-sm me-2">
-                Dashboard
-            </a>
-            <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger btn-sm">
-                Logout
-            </a>
-        </div>
-    </div>
-</nav>
-
-<div class="container py-5" style="max-width: 900px;">
-    <div class="card shadow-sm border-0 rounded-3">
-        <div class="card-body p-4 p-md-5">
-
-            <h2 class="fw-bold mb-3">About ExamArena</h2>
-            <p class="text-muted fs-6">
-                <strong>ExamArena</strong> is a computer-based testing (CBT) and exam
-                preparation platform designed to simulate real examination environments
-                such as JAMB, WAEC, and NECO.
-            </p>
-
-            <p class="text-muted">
-                The system is built to run efficiently in offline and local network (LAN)
-                environments, making it suitable for cyber cafés, school computer labs,
-                and tutorial centers.
-            </p>
-
-            <hr class="my-4">
-
-            <h5 class="fw-bold">Key Features</h5>
-            <ul class="text-muted">
-                <li>Realistic CBT exam simulation</li>
-                <li>Multi-user access over local network</li>
-                <li>Student account management</li>
-                <li>Automated scoring and result analysis</li>
-                <li>Offline-first design for reliable use</li>
-                <li>AI-assisted performance analysis (available in supported versions)</li>
-            </ul>
-
-            <hr class="my-4">
-
-            <h5 class="fw-bold">AI-Powered Learning Support</h5>
-            <p class="text-muted">
-                ExamArena integrates intelligent analysis tools that evaluate student
-                performance after exams. The system identifies weak areas and recommends
-                topics that require more attention.
-            </p>
-
-            <p class="text-muted">
-                Advanced versions of ExamArena also include an optional AI Tutor that
-                helps students understand difficult topics, provides study guidance,
-                and suggests learning materials.
-            </p>
-
-            <hr class="my-4">
-
-            <h5 class="fw-bold">About Suleja Digital Innovation Hub</h5>
-            <p class="text-muted">
-                ExamArena was developed at <strong>Suleja Digital Innovation Hub</strong>,
-                a technology and innovation center focused on training individuals in
-                digital skills and building practical software solutions.
-            </p>
-
-            <p class="text-muted">
-                The hub supports the development of systems, platforms, and services
-                aimed at solving real-world problems through technology.
-            </p>
-
-        </div>
-    </div>
-
-    <p class="text-center text-muted small mt-4">
-        © 2025 ExamArena. Developed by Suleja Digital Innovation Hub.
-    </p>
-</div>
-
-<script src="{{ url_for('static', filename='vendor/js/bootstrap.bundle.min.js') }}"></script>
-</body>
-</html>
-
-
 --- FILE: ./templates/edit_subject.html ---
 
 <!DOCTYPE html>
@@ -1140,7 +1183,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Edit Subject</title>
-<link rel="shortcut icon" href="{{ url_for('static', filename='my_icon.ico') }}" type="image/x-icon">
+<link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.jpg') }}" type="image/x-icon">
     <link href="{{ url_for('static', filename='vendor/css/bootstrap.min.css') }}" rel="stylesheet">
 </head>
 <body class="bg-light">
@@ -1620,12 +1663,26 @@ body {
     width: 100%; /* Important for horizontal centering to work */
 }
 
+/* --- Custom Logo Image Styling --- */
+.logo-icon-replacement {
+    height: 1.25em;
+    width: auto;
+    vertical-align: middle;
+}
+/* Custom sizing for the large logo on the login page */
+.logo-icon-replacement {
+    height: 1.25em;
+    width: auto;
+    vertical-align: middle;
+}
+
 
 --- FILE: ./static/css/dashboard.css ---
 
 .dashboard-container {
+    /* Base style: limit width and center horizontally */
     max-width: 1200px;
-    margin: 0 auto; /* Ensures horizontal centering */
+    margin: 0 auto;
     padding: 2rem;
 }
 
@@ -1641,7 +1698,6 @@ body {
     justify-items: center; /* Centers cards within their grid cell */
     max-width: 1000px; /* Constrain width for centering */
     margin: 0 auto; /* Center the grid container itself */
-}
 }
 
 .battle-card {
@@ -1699,43 +1755,7 @@ body {
 }
 .btn-action:hover { opacity: 0.9; }
 
-/* --- Dashboard Centering Simplification (Final) --- */
-.dashboard-container {
-    /* Calculates height minus the navbar height (approx 70px) and padding */
-    min-height: calc(100vh - 70px - 4rem); 
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Center content vertically */
-    align-items: center;    /* Center content horizontally */
-    
-    max-width: 1000px; 
-    margin: 0 auto; 
-    padding: 2rem; /* Keep existing padding */
-}
-
-/* Ensure the exam grid centers horizontally inside its container */
-.exam-grid {
-    margin: 0 auto;
-}
-
-/* --- Dashboard Centering Simplification (Final) --- */
-.dashboard-container {
-    /* Calculates height minus the navbar height (approx 70px) and padding */
-    min-height: calc(100vh - 70px - 4rem); 
-    display: flex;
-    flex-direction: column;
-    justify-content: center; /* Center content vertically */
-    align-items: center;    /* Center content horizontally */
-    
-    max-width: 1000px; 
-    margin: 0 auto; 
-    padding: 2rem; /* Keep existing padding */
-}
-
-/* Ensure the exam grid centers horizontally inside its container */
-.exam-grid {
-    margin: 0 auto;
-}
+/* Vertical Centering is handled by .dashboard-page-content in base.css */
 
 
 --- FILE: ./static/css/results.css ---
@@ -1822,44 +1842,67 @@ body {
 
 --- FILE: ./exam_app/utils.py ---
 
-from flask import g, session, current_app as app
-from . import db
-from .models import Exam
-from sqlalchemy.exc import IntegrityError # Import for handling database errors
+import random
+from flask import session, g, current_app as app
+from exam_app import db
+from exam_app.models import Exam, Subject
 
 def before_request():
-    """Sets the global variable 'g.user' to the logged-in username."""
-    g.user = None
-    if 'username' in session:
-        g.user = session['username']
+    """
+    Global check before every request.
+    Restores the logged-in user from the session to the global 'g' object.
+    """
+    # Fix: match the key 'username' used in auth.py
+    g.user = session.get('username')
 
 def add_initial_data(app):
-    """Adds the three main exam types if they do not already exist."""
-    # Ensure this runs within the application context
+    """Add initial data if database is empty."""
     with app.app_context():
-        
-        # Check if JAMB exists
-        if not db.session.execute(db.select(Exam).filter_by(name='JAMB')).scalar_one_or_none():
-            jamb = Exam(name='JAMB', description='Joint Admissions and Matriculation Board')
-            db.session.add(jamb)
-        
-        # Check if WAEC exists
-        if not db.session.execute(db.select(Exam).filter_by(name='WAEC')).scalar_one_or_none():
-            waec = Exam(name='WAEC', description='West African Examinations Council')
-            db.session.add(waec)
-            
-        # Check if NECO exists
-        if not db.session.execute(db.select(Exam).filter_by(name='NECO')).scalar_one_or_none():
-            neco = Exam(name='NECO', description='National Examination Council')
-            db.session.add(neco)
-            
+        # Check if DB is empty (exams table)
         try:
-            db.session.commit()
-            print("Initial exam data checked and added if missing.")
-        except IntegrityError:
-            # Handle potential race conditions during concurrent startup
-            db.session.rollback()
-            print("Initial data already exists in the database.")
+            if not Exam.query.first():
+                # Add Exams
+                exams = [Exam(name='JAMB'), Exam(name='WAEC'), Exam(name='NECO')]
+                db.session.add_all(exams)
+                db.session.commit()
+                
+                # Add Default Subjects
+                jamb = Exam.query.filter_by(name='JAMB').first()
+                if jamb:
+                    subjects = ['Use of English', 'Mathematics', 'Physics', 'Chemistry', 'Biology']
+                    for sub in subjects:
+                        existing = Subject.query.filter_by(name=sub, exam=jamb).first()
+                        if not existing:
+                            db.session.add(Subject(name=sub, exam=jamb))
+                    db.session.commit()
+        except Exception as e:
+            # Prints error to console but doesn't crash app if DB isn't ready
+            print(f"Database init skipped: {e}")
+
+def prepare_shuffled_questions(questions):
+    """
+    Takes a list of Question objects.
+    Returns a list of dictionaries with shuffled options.
+    """
+    random.shuffle(questions)
+    
+    prepared_data = []
+    for q in questions:
+        options = [
+            {'key': 'A', 'text': q.option_a},
+            {'key': 'B', 'text': q.option_b},
+            {'key': 'C', 'text': q.option_c},
+            {'key': 'D', 'text': q.option_d}
+        ]
+        random.shuffle(options)
+        
+        prepared_data.append({
+            'q': q,
+            'opts': options
+        })
+    
+    return prepared_data
+
 
 --- FILE: ./exam_app/models.py ---
 
@@ -1973,6 +2016,7 @@ def logout():
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash, g, current_app as app
 from exam_app import db
 from exam_app.models import Exam, Subject, Question
+from exam_app.utils import prepare_shuffled_questions
 import random
 
 bp = Blueprint('main', __name__)
@@ -1987,6 +2031,17 @@ def dashboard():
     jamb_exam = Exam.query.filter_by(name='JAMB').first()
     
     return render_template('dashboard.html', exams=exams, jamb_exam=jamb_exam, admin_username=app.config['ADMIN_USERNAME'])
+
+@bp.route('/about')
+def about():
+    # FIX: Removed the login check so users can see this page WITHOUT logging in
+    return render_template('about.html')
+
+@bp.route('/ai_preview')
+def ai_preview():
+    # Keep login check here (Student feature)
+    if not g.user: return redirect(url_for('auth.login'))
+    return render_template('ai_preview.html')
 
 @bp.route('/jamb_setup', methods=['GET', 'POST'])
 def jamb_setup():
@@ -2005,111 +2060,91 @@ def jamb_setup():
             flash('You must select exactly 4 subjects.', 'danger')
         else:
             session['jamb_subjects'] = selected_ids
-            session.pop('jamb_question_ids', None) # Clear old session
+            session.pop('exam_shuffle_data', None)
             return redirect(url_for('main.take_jamb'))
             
     return render_template('jamb_setup.html', subjects=subjects)
 
 @bp.route('/take_jamb', methods=['GET', 'POST'])
 def take_jamb():
-    if not g.user: return redirect(url_for('auth.login'))
-    
-    subject_ids = session.get('jamb_subjects')
-    if not subject_ids:
-        return redirect(url_for('main.jamb_setup'))
+    return handle_exam_logic(mode='JAMB')
 
+@bp.route('/take_exam/<int:subject_id>', methods=['GET', 'POST'])
+def take_exam(subject_id):
+    return handle_exam_logic(mode='SINGLE', subject_id=subject_id)
+
+def handle_exam_logic(mode, subject_id=None):
+    if not g.user: return redirect(url_for('auth.login'))
+
+    # 1. POST: Grade the Exam
     if request.method == 'POST':
         total_score = 0
+        total_questions = 0
         results_list = []
         
-        served_question_ids = session.get('jamb_question_ids', [])
+        exam_data = session.get('exam_shuffle_data', {})
         
-        if not served_question_ids:
-             # Fallback if session lost (rare but possible)
-             flash('Session expired. Please restart the exam.', 'warning')
-             return redirect(url_for('main.dashboard'))
+        if not exam_data:
+            flash('Session expired or invalid. Please restart.', 'warning')
+            return redirect(url_for('main.dashboard'))
 
-        for q_id in served_question_ids:
-            question = Question.query.get(q_id)
-            if question:
-                user_answer = request.form.get(f'q_{q_id}')
-                is_correct = (user_answer == question.correct_answer) if user_answer else False
-                if is_correct: total_score += 1
+        for subject_name, items in exam_data.items():
+            for item in items:
+                q_id = item['q_id']
+                question = Question.query.get(q_id)
                 
-                results_list.append({
-                    'question_text': question.question_text,
-                    'user_answer': user_answer,
-                    'correct_answer': question.correct_answer,
-                    'is_correct': is_correct,
-                    'explanation': question.explanation,
-                    'options': {'A':question.option_a, 'B':question.option_b, 'C':question.option_c, 'D':question.option_d},
-                    'subject_name': question.subject.name
-                })
+                if question:
+                    total_questions += 1
+                    user_val = request.form.get(f'q_{q_id}')
+                    
+                    is_correct = (user_val == question.correct_answer) if user_val else False
+                    if is_correct: total_score += 1
+                    
+                    results_list.append({
+                        'question_text': question.question_text,
+                        'user_answer': user_val,
+                        'correct_answer': question.correct_answer,
+                        'is_correct': is_correct,
+                        'explanation': question.explanation,
+                        'options': {'A':question.option_a, 'B':question.option_b, 'C':question.option_c, 'D':question.option_d},
+                        'subject_name': subject_name
+                    })
 
         session['last_exam_results'] = {
-            'subject_name': 'JAMB Mock Exam (4 Subjects)',
+            'subject_name': 'JAMB Mock' if mode == 'JAMB' else list(exam_data.keys())[0],
             'score': total_score,
-            'total_questions': len(served_question_ids),
+            'total_questions': total_questions,
             'results_list': results_list
         }
         return redirect(url_for('main.exam_results'))
 
-    # GET: Prepare exam
-    exam_data = {} 
-    all_served_ids = []
+    # 2. GET: Prepare and Randomize Exam
+    exam_data_objs = {}
+    exam_data_session = {}
     
-    for sub_id in subject_ids:
-        subject = Subject.query.get(sub_id)
-        if subject:
-            limit = 60 if 'english' in subject.name.lower() else 40
-            questions = Question.query.filter_by(subject_id=subject.id).all()
-            random.shuffle(questions)
-            selected_questions = questions[:limit]
-            
-            exam_data[subject.name] = selected_questions
-            all_served_ids.extend([q.id for q in selected_questions])
+    if mode == 'JAMB':
+        subject_ids = session.get('jamb_subjects')
+        if not subject_ids: return redirect(url_for('main.jamb_setup'))
         
-    session['jamb_question_ids'] = all_served_ids
-    return render_template('take_jamb.html', exam_data=exam_data)
+        for sub_id in subject_ids:
+            sub = Subject.query.get(sub_id)
+            if sub:
+                limit = 60 if 'english' in sub.name.lower() else 40
+                qs = Question.query.filter_by(subject_id=sub.id).all()
+                shuffled_items = prepare_shuffled_questions(qs)[:limit]
+                exam_data_objs[sub.name] = shuffled_items
+                exam_data_session[sub.name] = [{'q_id': x['q'].id} for x in shuffled_items]
+                
+    else: 
+        if subject_id:
+            sub = Subject.query.get_or_404(subject_id)
+            qs = Question.query.filter_by(subject_id=sub.id).all()
+            shuffled_items = prepare_shuffled_questions(qs)
+            exam_data_objs[sub.name] = shuffled_items
+            exam_data_session[sub.name] = [{'q_id': x['q'].id} for x in shuffled_items]
 
-@bp.route('/take_exam/<int:subject_id>', methods=['GET', 'POST'])
-def take_exam(subject_id):
-    if not g.user: return redirect(url_for('auth.login'))
-    subject = Subject.query.get_or_404(subject_id)
-    questions = Question.query.filter_by(subject_id=subject_id).all()
-    
-    if not questions:
-        flash(f"No questions for {subject.name}.", 'danger')
-        return redirect(url_for('main.dashboard'))
-
-    if request.method == 'POST':
-        score = 0
-        results = []
-        for q in questions:
-            user_ans = request.form.get(f'q_{q.id}')
-            is_corr = (user_ans == q.correct_answer) if user_ans else False
-            if is_corr: score += 1
-            
-            results.append({
-                'question_text': q.question_text,
-                'user_answer': user_ans,
-                'correct_answer': q.correct_answer,
-                'is_correct': is_corr,
-                'explanation': q.explanation,
-                'options': {'A':q.option_a, 'B':q.option_b, 'C':q.option_c, 'D':q.option_d},
-                'subject_name': subject.name
-            })
-            
-        session['last_exam_results'] = {
-            'subject_name': subject.name,
-            'score': score,
-            'total_questions': len(questions),
-            'results_list': results
-        }
-        return redirect(url_for('main.exam_results'))
-
-    random.shuffle(questions)
-    return render_template('take_exam.html', subject=subject, questions=questions)
+    session['exam_shuffle_data'] = exam_data_session
+    return render_template('take_jamb.html', exam_data=exam_data_objs, mode=mode)
 
 @bp.route('/exam_results')
 def exam_results():
@@ -2117,12 +2152,6 @@ def exam_results():
     results = session.pop('last_exam_results', None)
     if not results: return redirect(url_for('main.dashboard'))
     return render_template('exam_results.html', results=results)
-
-@bp.route('/about')
-def about():
-    # If the user is not logged in, redirect them to the login page.
-    if not g.user: return redirect(url_for('auth.login'))
-    return render_template('about.html')
 
 
 --- FILE: ./exam_app/routes/admin.py ---
