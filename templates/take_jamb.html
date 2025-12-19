@@ -2,14 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>JAMB War Room</title>
-<link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.jpg') }}" type="image/x-icon">
+    <title>Exam War Room</title>
     <link href="{{ url_for('static', filename='vendor/css/bootstrap.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='vendor/css/all.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/jamb.css') }}" rel="stylesheet">
 </head>
-<body class="background-themed">
+<body>
     <form method="POST" id="examForm">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
 
@@ -39,7 +38,7 @@
             </div>
 
             <div class="d-flex align-items-center gap-3">
-                <div id="timer" class="timer-display shadow-inner">02:00:00</div>
+                <div id="timer" class="timer-display shadow-inner">00:00:00</div>
                 <button type="button" class="btn btn-danger px-3 fw-bold" onclick="openAlert()">
                     Submit
                 </button>
@@ -49,34 +48,30 @@
         <div class="war-room-container">
             <div class="main-stage">
                 <div class="tab-content h-100">
-                    {% for subject_name, questions in exam_data.items() %}
+                    {% for subject_name, items in exam_data.items() %}
                     {% set subject_index = loop.index %}
                     <div class="tab-pane fade h-100 {% if loop.first %}show active{% endif %}" id="content-{{ subject_index }}">
                         <div class="h-100" style="overflow-y: auto; padding-bottom: 80px;" id="scroll-{{ subject_index }}">
-                            {% if questions %}
-                                {% for q in questions %}
-                                <div class="question-block mb-5" id="q-{{ subject_index }}-{{ loop.index }}">
+                            {% if items %}
+                                {% for item in items %}
+                                {% set question_index = loop.index %}
+                                
+                                <div class="question-block mb-5" id="q-{{ subject_index }}-{{ question_index }}">
                                     <div class="d-flex align-items-center mb-3">
-                                        <span class="badge bg-secondary me-2 rounded-pill">Question {{ loop.index }}</span>
+                                        <span class="badge bg-secondary me-2 rounded-pill">Question {{ question_index }}</span>
                                     </div>
-                                    <div class="question-text">{{ q.question_text }}</div>
+                                    <div class="question-text">{{ item.q.question_text }}</div>
+                                    
                                     <div class="options-list">
-                                        <div class="option-card" onclick="selectOption('q_{{ q.id }}', 'A', this, {{ subject_index }}, {{ loop.index }})">
-                                            <input type="radio" name="q_{{ q.id }}" value="A" class="d-none">
-                                            <span class="fw-bold me-3 text-muted">A.</span> {{ q.option_a }}
+                                        {% for opt in item.opts %}
+                                        {% set labels = ['A', 'B', 'C', 'D'] %}
+                                        {% set visual_label = labels[loop.index0] if loop.index0 < 4 else '?' %}
+                                        
+                                        <div class="option-card" onclick="selectOption('q_{{ item.q.id }}', '{{ opt.key }}', this, {{ subject_index }}, {{ question_index }})">
+                                            <input type="radio" name="q_{{ item.q.id }}" value="{{ opt.key }}" class="d-none">
+                                            <span class="fw-bold me-3 text-muted">{{ visual_label }}.</span> {{ opt.text }}
                                         </div>
-                                        <div class="option-card" onclick="selectOption('q_{{ q.id }}', 'B', this, {{ subject_index }}, {{ loop.index }})">
-                                            <input type="radio" name="q_{{ q.id }}" value="B" class="d-none">
-                                            <span class="fw-bold me-3 text-muted">B.</span> {{ q.option_b }}
-                                        </div>
-                                        <div class="option-card" onclick="selectOption('q_{{ q.id }}', 'C', this, {{ subject_index }}, {{ loop.index }})">
-                                            <input type="radio" name="q_{{ q.id }}" value="C" class="d-none">
-                                            <span class="fw-bold me-3 text-muted">C.</span> {{ q.option_c }}
-                                        </div>
-                                        <div class="option-card" onclick="selectOption('q_{{ q.id }}', 'D', this, {{ subject_index }}, {{ loop.index }})">
-                                            <input type="radio" name="q_{{ q.id }}" value="D" class="d-none">
-                                            <span class="fw-bold me-3 text-muted">D.</span> {{ q.option_d }}
-                                        </div>
+                                        {% endfor %}
                                     </div>
                                 </div>
                                 <hr class="border-light my-5">
@@ -101,10 +96,10 @@
             <div class="nav-map">
                 <div class="map-header">Question Map</div>
                 <div class="grid-container">
-                    {% for subject_name, questions in exam_data.items() %}
+                    {% for subject_name, items in exam_data.items() %}
                     {% set subject_index = loop.index %}
                     <div class="question-grid subject-palette {% if not loop.first %}d-none{% endif %}" id="palette-{{ subject_index }}">
-                        {% for q in questions %}
+                        {% for item in items %}
                         <a href="javascript:void(0)" 
                            onclick="scrollToQuestion({{ subject_index }}, {{ loop.index }})"
                            class="grid-btn" 
@@ -170,6 +165,7 @@
         function selectOption(inputName, value, card, subjectIndex, questionIndex) {
             const radio = card.querySelector('input[type="radio"]');
             radio.checked = true;
+            radio.value = value;
             const container = card.parentElement;
             container.querySelectorAll('.option-card').forEach(c => c.classList.remove('selected'));
             card.classList.add('selected');
@@ -181,7 +177,7 @@
         function switchTab(index, btn) {
             currentSubjectIdx = index;
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
+            if(btn) btn.classList.add('active');
             document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('show', 'active'));
             document.getElementById(`content-${index}`).classList.add('show', 'active');
             document.querySelectorAll('.question-grid').forEach(g => g.classList.add('d-none'));
@@ -202,7 +198,9 @@
             if (e.key.toLowerCase() === 'p') navQuestion(-1);
         });
 
-        let totalSeconds = 120 * 60; 
+        const isJamb = "{{ mode }}" === "JAMB";
+        let totalSeconds = isJamb ? (120 * 60) : (60 * 60); 
+        
         const timerElem = document.getElementById('timer');
         setInterval(() => {
             if (totalSeconds <= 0) { finalSubmit(); return; }
@@ -227,3 +225,6 @@
     </script>
 </body>
 </html>
+
+# Also update the single exam template to match
+cp templates/take_jamb.html templates/take_exam.html

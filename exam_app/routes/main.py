@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash, g, current_app as app
 from exam_app import db
 from exam_app.models import Exam, Subject, Question
+from exam_app.utils import prepare_shuffled_questions
 import random
 
 bp = Blueprint('main', __name__)
@@ -15,6 +16,17 @@ def dashboard():
     jamb_exam = Exam.query.filter_by(name='JAMB').first()
     
     return render_template('dashboard.html', exams=exams, jamb_exam=jamb_exam, admin_username=app.config['ADMIN_USERNAME'])
+
+@bp.route('/about')
+def about():
+    # FIX: Removed the login check so users can see this page WITHOUT logging in
+    return render_template('about.html')
+
+@bp.route('/ai_preview')
+def ai_preview():
+    # Keep login check here (Student feature)
+    if not g.user: return redirect(url_for('auth.login'))
+    return render_template('ai_preview.html')
 
 @bp.route('/jamb_setup', methods=['GET', 'POST'])
 def jamb_setup():
@@ -33,111 +45,91 @@ def jamb_setup():
             flash('You must select exactly 4 subjects.', 'danger')
         else:
             session['jamb_subjects'] = selected_ids
-            session.pop('jamb_question_ids', None) # Clear old session
+            session.pop('exam_shuffle_data', None)
             return redirect(url_for('main.take_jamb'))
             
     return render_template('jamb_setup.html', subjects=subjects)
 
 @bp.route('/take_jamb', methods=['GET', 'POST'])
 def take_jamb():
-    if not g.user: return redirect(url_for('auth.login'))
-    
-    subject_ids = session.get('jamb_subjects')
-    if not subject_ids:
-        return redirect(url_for('main.jamb_setup'))
+    return handle_exam_logic(mode='JAMB')
 
+@bp.route('/take_exam/<int:subject_id>', methods=['GET', 'POST'])
+def take_exam(subject_id):
+    return handle_exam_logic(mode='SINGLE', subject_id=subject_id)
+
+def handle_exam_logic(mode, subject_id=None):
+    if not g.user: return redirect(url_for('auth.login'))
+
+    # 1. POST: Grade the Exam
     if request.method == 'POST':
         total_score = 0
+        total_questions = 0
         results_list = []
         
-        served_question_ids = session.get('jamb_question_ids', [])
+        exam_data = session.get('exam_shuffle_data', {})
         
-        if not served_question_ids:
-             # Fallback if session lost (rare but possible)
-             flash('Session expired. Please restart the exam.', 'warning')
-             return redirect(url_for('main.dashboard'))
+        if not exam_data:
+            flash('Session expired or invalid. Please restart.', 'warning')
+            return redirect(url_for('main.dashboard'))
 
-        for q_id in served_question_ids:
-            question = Question.query.get(q_id)
-            if question:
-                user_answer = request.form.get(f'q_{q_id}')
-                is_correct = (user_answer == question.correct_answer) if user_answer else False
-                if is_correct: total_score += 1
+        for subject_name, items in exam_data.items():
+            for item in items:
+                q_id = item['q_id']
+                question = Question.query.get(q_id)
                 
-                results_list.append({
-                    'question_text': question.question_text,
-                    'user_answer': user_answer,
-                    'correct_answer': question.correct_answer,
-                    'is_correct': is_correct,
-                    'explanation': question.explanation,
-                    'options': {'A':question.option_a, 'B':question.option_b, 'C':question.option_c, 'D':question.option_d},
-                    'subject_name': question.subject.name
-                })
+                if question:
+                    total_questions += 1
+                    user_val = request.form.get(f'q_{q_id}')
+                    
+                    is_correct = (user_val == question.correct_answer) if user_val else False
+                    if is_correct: total_score += 1
+                    
+                    results_list.append({
+                        'question_text': question.question_text,
+                        'user_answer': user_val,
+                        'correct_answer': question.correct_answer,
+                        'is_correct': is_correct,
+                        'explanation': question.explanation,
+                        'options': {'A':question.option_a, 'B':question.option_b, 'C':question.option_c, 'D':question.option_d},
+                        'subject_name': subject_name
+                    })
 
         session['last_exam_results'] = {
-            'subject_name': 'JAMB Mock Exam (4 Subjects)',
+            'subject_name': 'JAMB Mock' if mode == 'JAMB' else list(exam_data.keys())[0],
             'score': total_score,
-            'total_questions': len(served_question_ids),
+            'total_questions': total_questions,
             'results_list': results_list
         }
         return redirect(url_for('main.exam_results'))
 
-    # GET: Prepare exam
-    exam_data = {} 
-    all_served_ids = []
+    # 2. GET: Prepare and Randomize Exam
+    exam_data_objs = {}
+    exam_data_session = {}
     
-    for sub_id in subject_ids:
-        subject = Subject.query.get(sub_id)
-        if subject:
-            limit = 60 if 'english' in subject.name.lower() else 40
-            questions = Question.query.filter_by(subject_id=subject.id).all()
-            random.shuffle(questions)
-            selected_questions = questions[:limit]
-            
-            exam_data[subject.name] = selected_questions
-            all_served_ids.extend([q.id for q in selected_questions])
+    if mode == 'JAMB':
+        subject_ids = session.get('jamb_subjects')
+        if not subject_ids: return redirect(url_for('main.jamb_setup'))
         
-    session['jamb_question_ids'] = all_served_ids
-    return render_template('take_jamb.html', exam_data=exam_data)
+        for sub_id in subject_ids:
+            sub = Subject.query.get(sub_id)
+            if sub:
+                limit = 60 if 'english' in sub.name.lower() else 40
+                qs = Question.query.filter_by(subject_id=sub.id).all()
+                shuffled_items = prepare_shuffled_questions(qs)[:limit]
+                exam_data_objs[sub.name] = shuffled_items
+                exam_data_session[sub.name] = [{'q_id': x['q'].id} for x in shuffled_items]
+                
+    else: 
+        if subject_id:
+            sub = Subject.query.get_or_404(subject_id)
+            qs = Question.query.filter_by(subject_id=sub.id).all()
+            shuffled_items = prepare_shuffled_questions(qs)
+            exam_data_objs[sub.name] = shuffled_items
+            exam_data_session[sub.name] = [{'q_id': x['q'].id} for x in shuffled_items]
 
-@bp.route('/take_exam/<int:subject_id>', methods=['GET', 'POST'])
-def take_exam(subject_id):
-    if not g.user: return redirect(url_for('auth.login'))
-    subject = Subject.query.get_or_404(subject_id)
-    questions = Question.query.filter_by(subject_id=subject_id).all()
-    
-    if not questions:
-        flash(f"No questions for {subject.name}.", 'danger')
-        return redirect(url_for('main.dashboard'))
-
-    if request.method == 'POST':
-        score = 0
-        results = []
-        for q in questions:
-            user_ans = request.form.get(f'q_{q.id}')
-            is_corr = (user_ans == q.correct_answer) if user_ans else False
-            if is_corr: score += 1
-            
-            results.append({
-                'question_text': q.question_text,
-                'user_answer': user_ans,
-                'correct_answer': q.correct_answer,
-                'is_correct': is_corr,
-                'explanation': q.explanation,
-                'options': {'A':q.option_a, 'B':q.option_b, 'C':q.option_c, 'D':q.option_d},
-                'subject_name': subject.name
-            })
-            
-        session['last_exam_results'] = {
-            'subject_name': subject.name,
-            'score': score,
-            'total_questions': len(questions),
-            'results_list': results
-        }
-        return redirect(url_for('main.exam_results'))
-
-    random.shuffle(questions)
-    return render_template('take_exam.html', subject=subject, questions=questions)
+    session['exam_shuffle_data'] = exam_data_session
+    return render_template('take_jamb.html', exam_data=exam_data_objs, mode=mode)
 
 @bp.route('/exam_results')
 def exam_results():
@@ -145,9 +137,3 @@ def exam_results():
     results = session.pop('last_exam_results', None)
     if not results: return redirect(url_for('main.dashboard'))
     return render_template('exam_results.html', results=results)
-
-@bp.route('/about')
-def about():
-    # If the user is not logged in, redirect them to the login page.
-    if not g.user: return redirect(url_for('auth.login'))
-    return render_template('about.html')

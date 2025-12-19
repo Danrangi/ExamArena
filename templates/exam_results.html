@@ -2,105 +2,94 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Results - Performance Analysis</title>
-<link rel="shortcut icon" href="{{ url_for('static', filename='img/logo.jpg') }}" type="image/x-icon">
+    <title>Exam Results</title>
     <link href="{{ url_for('static', filename='vendor/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ url_for('static', filename='vendor/css/all.min.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/base.css') }}" rel="stylesheet">
     <link href="{{ url_for('static', filename='css/results.css') }}" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='vendor/css/all.min.css') }}">
+    <style>
+        .btn-ai {
+            background-color: #6366f1;
+            color: white;
+            border: none;
+        }
+        .btn-ai:hover {
+            background-color: #4f46e5;
+            color: white;
+        }
+    </style>
 </head>
-<body>
-    <div class="result-container">
-        <div class="performance-card">
-            <h1 class="text-primary fw-bold mb-3"><i class="fas fa-chart-line"></i> Performance Report</h1>
-            <h4 class="text-muted">{{ results.subject_name }}</h4>
-            
-            {% set percent = (results.score / results.total_questions * 100) if results.total_questions > 0 else 0 %}
-            
-            <div class="d-flex justify-content-center align-items-baseline gap-2 mt-4">
-                <span class="display-3 fw-bold {{ 'text-success' if percent >= 50 else 'text-danger' }}">
-                    {{ "%.1f"|format(percent) }}%
-                </span>
-                <span class="text-muted fs-5">Total Score</span>
-            </div>
-
-            <div class="score-chart">
-                <div class="score-bar" style="width: {{ percent }}%;"></div>
-            </div>
-            
-            <div class="row mt-4">
-                <div class="col-4 border-end">
-                    <div class="fw-bold fs-4">{{ results.score }}</div>
-                    <div class="small text-muted">Correct</div>
+<body class="bg-light">
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0 mb-4 overflow-hidden">
+                    <div class="card-header bg-white text-center py-4 border-bottom-0">
+                        <h5 class="text-muted text-uppercase small fw-bold mb-2">{{ results.subject_name }}</h5>
+                        <h1 class="display-1 fw-bold {{ 'text-success' if (results.score / results.total_questions * 100) >= 50 else 'text-danger' }}">
+                            {{ ((results.score / results.total_questions) * 100)|round|int }}%
+                        </h1>
+                        <p class="lead mb-0">You scored <strong>{{ results.score }}</strong> out of <strong>{{ results.total_questions }}</strong></p>
+                    </div>
+                    
+                    <div class="card-body bg-light border-top d-flex gap-3 justify-content-center py-4">
+                        <a href="{{ url_for('main.dashboard') }}" class="btn btn-outline-secondary px-4 fw-bold">
+                            <i class="fas fa-home me-2"></i> Dashboard
+                        </a>
+                        
+                        <a href="{{ url_for('main.ai_preview') }}" class="btn btn-ai px-4 fw-bold shadow-sm">
+                            <i class="fas fa-robot me-2"></i> AI Preview
+                        </a>
+                    </div>
                 </div>
-                <div class="col-4 border-end">
-                    <div class="fw-bold fs-4">{{ results.total_questions - results.score }}</div>
-                    <div class="small text-muted">Wrong</div>
-                </div>
-                <div class="col-4">
-                    <div class="fw-bold fs-4">{{ results.total_questions }}</div>
-                    <div class="small text-muted">Total</div>
-                </div>
-            </div>
-        </div>
 
-        <h3 class="mb-4 ps-2 border-start border-5 border-primary">Corrections & Explanations</h3>
-
-        {% for subject, items in results.results_list|sort(attribute='subject_name')|groupby('subject_name') %}
-            <div class="mb-5">
-                <h4 class="text-muted text-uppercase fw-bold mb-3 ls-1"><i class="fas fa-book me-2"></i> {{ subject }}</h4>
+                <h4 class="mb-4 fw-bold text-secondary"><i class="fas fa-check-double me-2"></i>Corrections & Explanations</h4>
                 
-                {% for result in items %}
-                <div class="correction-box {{ 'correct' if result.is_correct else 'wrong' }}">
-                    <div class="d-flex justify-content-between mb-2">
-                        <span class="badge bg-light text-dark border">Q{{ loop.index }}</span>
-                        {% if result.is_correct %}
-                            <span class="badge bg-success"><i class="fas fa-check"></i> Correct</span>
-                        {% else %}
-                            <span class="badge bg-danger"><i class="fas fa-times"></i> Failed</span>
+                {% for res in results.results_list %}
+                <div class="card shadow-sm border-0 mb-3 question-card">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <span class="badge {{ 'bg-success' if res.is_correct else 'bg-danger' }} mb-2">
+                                {{ 'Correct' if res.is_correct else 'Incorrect' }}
+                            </span>
+                            <span class="text-muted small">Q{{ loop.index }}</span>
+                        </div>
+                        
+                        <h5 class="card-title mb-3 text-dark">{{ res.question_text }}</h5>
+                        
+                        <div class="row g-2 mb-3">
+                            <div class="col-md-6">
+                                <div class="p-2 rounded border {{ 'bg-success text-white border-success' if res.is_correct else 'bg-light text-muted' }}">
+                                    <small class="d-block fw-bold text-uppercase">Your Answer</small>
+                                    {{ res.user_answer if res.user_answer else 'No Answer' }}
+                                    {% if res.user_answer and res.options[res.user_answer] %}
+                                        - {{ res.options[res.user_answer] }}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="p-2 rounded border bg-opacity-10 {{ 'bg-success text-success border-success' if not res.is_correct else 'bg-light text-muted' }}">
+                                    <small class="d-block fw-bold text-uppercase">Correct Answer</small>
+                                    {{ res.correct_answer }} - {{ res.options[res.correct_answer] }}
+                                </div>
+                            </div>
+                        </div>
+
+                        {% if res.explanation %}
+                        <div class="alert alert-info d-flex align-items-start small mb-0">
+                            <i class="fas fa-lightbulb text-info me-2 mt-1"></i>
+                            <div>
+                                <strong>Explanation:</strong><br>
+                                {{ res.explanation }}
+                            </div>
+                        </div>
                         {% endif %}
                     </div>
-                    
-                    <p class="fw-bold fs-5 mb-3">{{ result.question_text }}</p>
-                    
-                    <div class="row g-2">
-                        <div class="col-md-6">
-                            <div class="p-2 border rounded {{ 'bg-success text-white border-success' if result.correct_answer == 'A' else '' }} {{ 'bg-danger text-white' if result.user_answer == 'A' and not result.is_correct else '' }}">
-                                A. {{ result.options.A }}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="p-2 border rounded {{ 'bg-success text-white border-success' if result.correct_answer == 'B' else '' }} {{ 'bg-danger text-white' if result.user_answer == 'B' and not result.is_correct else '' }}">
-                                B. {{ result.options.B }}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="p-2 border rounded {{ 'bg-success text-white border-success' if result.correct_answer == 'C' else '' }} {{ 'bg-danger text-white' if result.user_answer == 'C' and not result.is_correct else '' }}">
-                                C. {{ result.options.C }}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="p-2 border rounded {{ 'bg-success text-white border-success' if result.correct_answer == 'D' else '' }} {{ 'bg-danger text-white' if result.user_answer == 'D' and not result.is_correct else '' }}">
-                                D. {{ result.options.D }}
-                            </div>
-                        </div>
-                    </div>
-
-                    {% if result.explanation %}
-                    <div class="explanation">
-                        <strong><i class="fas fa-lightbulb"></i> Why?</strong> {{ result.explanation }}
-                    </div>
-                    {% endif %}
                 </div>
                 {% endfor %}
             </div>
-        {% endfor %}
-
-        <div class="text-center py-5">
-            <a href="{{ url_for('main.dashboard') }}" class="btn btn-secondary px-5 py-3 fw-bold rounded-pill">
-                <i class="fas fa-arrow-left me-2"></i> Return to Dashboard
-            </a>
         </div>
     </div>
+    <script src="{{ url_for('static', filename='vendor/js/bootstrap.bundle.min.js') }}"></script>
 </body>
 </html>
